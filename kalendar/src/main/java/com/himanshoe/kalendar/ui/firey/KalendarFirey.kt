@@ -139,7 +139,7 @@ fun KalendarFirey(
                             },
                             selectedKalendarDay = selectedKalendarDate.value,
                             kalendarDayColors = kalendarDayColors,
-                            dotColor = kalendarThemeColors[currentMonth.value.minus(1)].headerTextColor,
+                            dotColor = kalendarDayColors.localDateDotColor(day) ?: kalendarThemeColors[currentMonth.value.minus(1)].headerTextColor,
                             dayBackgroundColor = kalendarThemeColors[currentMonth.value.minus(1)].dayBackgroundColor,
                         )
                     }
@@ -238,7 +238,7 @@ fun KalendarFirey(
                             },
                             selectedKalendarDay = selectedKalendarDate.value,
                             kalendarDayColors = kalendarDayColors,
-                            dotColor = kalendarThemeColor.headerTextColor,
+                            dotColor = kalendarDayColors.localDateDotColor(day) ?: kalendarThemeColor.headerTextColor,
                             dayBackgroundColor = kalendarThemeColor.dayBackgroundColor,
                         )
                     }

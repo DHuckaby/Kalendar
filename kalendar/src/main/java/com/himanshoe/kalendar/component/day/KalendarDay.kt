@@ -67,7 +67,7 @@ fun KalendarDay(
     val bgColor = getBackgroundColor(kalendarDayState, dayBackgroundColor)
     val textColor = getTextColor(kalendarDayState, kalendarDayColors)
     val weight = getTextWeight(kalendarDayState)
-    val border = getBorder(isCurrentDay)
+    val border = getBorder(isCurrentDay && kalendarDayColors.showSelectedBorder)
 
     Column(
         modifier = modifier
@@ -98,7 +98,11 @@ fun KalendarDay(
         ) {
             val kalendarEventForDay = kalendarEvents.filter { it.date == kalendarDay.localDate }
             if (kalendarEventForDay.isNotEmpty()) {
-                val dayEvents = if (kalendarEventForDay.count() > 3) kalendarEventForDay.take(3) else kalendarEventForDay
+                val dayEvents = if (kalendarDayColors.showMultipleDotsForDay) {
+                    if (kalendarEventForDay.count() > 3) kalendarEventForDay.take(3) else kalendarEventForDay
+                } else {
+                    kalendarEventForDay.take(1)
+                }
                 dayEvents.forEachIndexed { index, _ ->
                     KalendarDots(
                         modifier = Modifier, index = index, size = size, color = dotColor

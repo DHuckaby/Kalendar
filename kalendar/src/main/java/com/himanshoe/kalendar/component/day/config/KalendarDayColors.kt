@@ -16,10 +16,14 @@
 package com.himanshoe.kalendar.component.day.config
 
 import androidx.compose.ui.graphics.Color
+import kotlinx.datetime.LocalDate
 
-data class KalendarDayColors(
+class KalendarDayColors(
     val textColor: Color, // Default Text Color
     val selectedTextColor: Color, // Selected Text Color
+    val showSelectedBorder: Boolean = true,
+    val showMultipleDotsForDay: Boolean = true,
+    val localDateDotColor: (LocalDate) -> Color? = { null }
 )
 
 object KalendarDayDefaultColors {
