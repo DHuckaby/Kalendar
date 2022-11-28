@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
@@ -157,7 +158,8 @@ fun KalendarFirey(
     takeMeToDate: LocalDate?,
     kalendarDayColors: KalendarDayColors,
     kalendarThemeColor: KalendarThemeColor,
-    kalendarHeaderConfig: KalendarHeaderConfig? = null
+    kalendarHeaderConfig: KalendarHeaderConfig? = null,
+    content: LazyGridScope.() -> Unit
 ) {
     val currentDay = takeMeToDate ?: Clock.System.todayIn(TimeZone.currentSystemDefault())
     val displayedMonth = remember {
@@ -243,6 +245,7 @@ fun KalendarFirey(
                         )
                     }
                 }
+                content()
             }
         )
     }

@@ -16,6 +16,7 @@
 package com.himanshoe.kalendar
 
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.himanshoe.kalendar.color.KalendarColors
@@ -79,6 +80,7 @@ fun Kalendar(
     kalendarDayColors: KalendarDayColors = KalendarDayDefaultColors.defaultColors(),
     kalendarHeaderConfig: KalendarHeaderConfig? = null,
     takeMeToDate: LocalDate? = null,
+    content: LazyGridScope.() -> Unit = {}
 ) {
     when (kalendarType) {
         is KalendarType.Oceanic -> KalendarOceanic(
@@ -99,7 +101,8 @@ fun Kalendar(
                 kalendarDayColors = kalendarDayColors,
                 kalendarThemeColor = kalendarThemeColor,
                 takeMeToDate = takeMeToDate,
-                kalendarHeaderConfig = kalendarHeaderConfig
+                kalendarHeaderConfig = kalendarHeaderConfig,
+                content = content
             )
         }
     }
