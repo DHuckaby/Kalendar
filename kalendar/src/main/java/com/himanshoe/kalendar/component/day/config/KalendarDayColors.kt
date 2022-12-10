@@ -23,7 +23,8 @@ class KalendarDayColors(
     val selectedTextColor: Color, // Selected Text Color
     val showSelectedBorder: Boolean = true,
     val showMultipleDotsForDay: Boolean = true,
-    val localDateDotColor: (LocalDate) -> Color? = { null }
+    val localDateDotColor: (LocalDate) -> Color? = { null },
+    val shouldModifyDateDotColor: Boolean = true
 )
 
 object KalendarDayDefaultColors {

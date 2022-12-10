@@ -105,7 +105,11 @@ fun KalendarDay(
                 }
                 dayEvents.forEachIndexed { index, _ ->
                     KalendarDots(
-                        modifier = Modifier, index = index, size = size, color = dotColor
+                        modifier = Modifier,
+                        index = index,
+                        size = size,
+                        color = dotColor,
+                        shouldModifyColor = kalendarDayColors.shouldModifyDateDotColor
                     )
                 }
             }
@@ -118,14 +122,19 @@ fun KalendarDots(
     modifier: Modifier = Modifier,
     index: Int,
     size: Dp,
-    color: Color
+    color: Color,
+    shouldModifyColor: Boolean
 ) {
     Box(
         modifier = modifier
             .padding(horizontal = 1.dp)
             .clip(shape = CircleShape)
             .background(
-                color = color.copy(alpha = index.plus(1) * 0.3F)
+                color = if (shouldModifyColor) {
+                    color.copy(alpha = index.plus(1) * 0.3F)
+                } else {
+                    color
+                }
             )
             .size(size = size.div(12))
     )
