@@ -17,10 +17,13 @@ package com.himanshoe.kalendar.ui.firey
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -186,69 +189,74 @@ fun KalendarFirey(
         )
     )
 
-    Column(
-        modifier = modifier
-            .background(
-                color = kalendarThemeColor.backgroundColor
-            )
-            .wrapContentHeight()
+    LazyVerticalGrid(
+        modifier = Modifier
+            .background(kalendarThemeColor.backgroundColor)
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 8.dp)
-    ) {
-        KalendarHeader(
-            modifier = Modifier.padding(vertical = 12.dp),
-            month = displayedMonth.value,
-            onPreviousClick = {
-                if (displayedMonth.value.value == 1) {
-                    displayedYear.value = displayedYear.value.minus(1)
-                }
-                displayedMonth.value = displayedMonth.value.minus(1)
-            },
-            onNextClick = {
-                if (displayedMonth.value.value == 12) {
-                    displayedYear.value = displayedYear.value.plus(1)
-                }
-                displayedMonth.value = displayedMonth.value.plus(1)
-            },
-            year = displayedYear.value,
-            kalendarHeaderConfig = kalendarHeaderConfig ?: newKalenderHeaderConfig
-        )
-
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxWidth(),
-            columns = GridCells.Fixed(7),
-            content = {
-                items(WeekDays) {
-                    KalendarNormalText(
-                        text = it,
-                        fontWeight = FontWeight.Normal,
-                        textColor = kalendarDayColors.textColor,
+            .padding(horizontal = 20.dp),
+        columns = GridCells.Fixed(7),
+        content = {
+            item(span = { GridItemSpan(7) }) {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+            item(
+                span = { GridItemSpan(7) }
+            ) {
+                KalendarHeader(
+                    month = displayedMonth.value,
+                    onPreviousClick = {
+                        if (displayedMonth.value.value == 1) {
+                            displayedYear.value = displayedYear.value.minus(1)
+                        }
+                        displayedMonth.value = displayedMonth.value.minus(1)
+                    },
+                    onNextClick = {
+                        if (displayedMonth.value.value == 12) {
+                            displayedYear.value = displayedYear.value.plus(1)
+                        }
+                        displayedMonth.value = displayedMonth.value.plus(1)
+                    },
+                    year = displayedYear.value,
+                    kalendarHeaderConfig = kalendarHeaderConfig ?: newKalenderHeaderConfig
+                )
+            }
+            item(span = { GridItemSpan(7) }) {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            items(WeekDays) {
+                KalendarNormalText(
+                    text = it,
+                    fontWeight = FontWeight.Normal,
+                    textColor = kalendarDayColors.textColor,
+                )
+            }
+            items((getInitialDayOfMonth(firstDayOfMonth)..daysInMonth).toList()) {
+                if (it > 0) {
+                    val day = getGeneratedDay(it, currentMonth, currentYear)
+                    val isCurrentDay = day == currentDay
+                    KalendarDay(
+                        kalendarDay = day.toKalendarDay(),
+                        modifier = Modifier,
+                        kalendarEvents = kalendarEvents,
+                        isCurrentDay = isCurrentDay,
+                        onCurrentDayClick = { kalendarDay, events ->
+                            selectedKalendarDate.value = kalendarDay.localDate
+                            onCurrentDayClick(kalendarDay, events)
+                        },
+                        selectedKalendarDay = selectedKalendarDate.value,
+                        kalendarDayColors = kalendarDayColors,
+                        dotColor = kalendarDayColors.localDateDotColor(day)
+                            ?: kalendarThemeColor.headerTextColor,
+                        dayBackgroundColor = kalendarThemeColor.dayBackgroundColor,
                     )
                 }
-                items((getInitialDayOfMonth(firstDayOfMonth)..daysInMonth).toList()) {
-                    if (it > 0) {
-                        val day = getGeneratedDay(it, currentMonth, currentYear)
-                        val isCurrentDay = day == currentDay
-                        KalendarDay(
-                            kalendarDay = day.toKalendarDay(),
-                            modifier = Modifier,
-                            kalendarEvents = kalendarEvents,
-                            isCurrentDay = isCurrentDay,
-                            onCurrentDayClick = { kalendarDay, events ->
-                                selectedKalendarDate.value = kalendarDay.localDate
-                                onCurrentDayClick(kalendarDay, events)
-                            },
-                            selectedKalendarDay = selectedKalendarDate.value,
-                            kalendarDayColors = kalendarDayColors,
-                            dotColor = kalendarDayColors.localDateDotColor(day) ?: kalendarThemeColor.headerTextColor,
-                            dayBackgroundColor = kalendarThemeColor.dayBackgroundColor,
-                        )
-                    }
-                }
-                content()
             }
-        )
-    }
+            content()
+            item(span = { GridItemSpan(7) }) {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    )
 }
 
 private fun getInitialDayOfMonth(firstDayOfMonth: DayOfWeek) = -(firstDayOfMonth.value).minus(2)
